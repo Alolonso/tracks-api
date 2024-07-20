@@ -1,7 +1,8 @@
 const { matchedData } = require('express-validator')
 const handleErrorResponse = require('../utils/handleError')
 const userModel = require('../models/user')
-const { encrypt } = require('../utils/handlePass')
+const { encrypt, compare } = require('../utils/handlePass')
+const { tokenSign } = require('../utils/handleToken')
 
 const registerCtrl = async (req, res) => {
   try {
@@ -21,4 +22,29 @@ const registerCtrl = async (req, res) => {
   }
 }
 
-module.exports = { registerCtrl }
+const loginCtrl = async (req, res) => {
+  try {
+    req = matchedData(req)
+    const user = await userModel.findOne({ email: req.email })
+    if (!user) {
+      handleErrorResponse(res, `User doesn't exist`, 401)
+      return
+    }
+    const checkPassword = await compare(req.password, user.password)
+    if (!checkPassword) {
+      handleErrorResponse(res, `Incorrect password`, 401)
+      return
+    }
+    const token = await tokenSign(user)
+    const data = {
+      token: token,
+      user: user
+    }
+    res.send(data)
+  } catch (error) {
+    console.log(error)
+    handleErrorResponse(res)
+  }
+}
+
+module.exports = { registerCtrl, loginCtrl }

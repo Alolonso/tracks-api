@@ -22,4 +22,17 @@ const validateRegisterData = [
   }
 ]
 
-module.exports = { validateRegisterData }
+const validateLoginData = [
+  check('email')
+    .exists()
+    .notEmpty()
+    .isEmail(),
+  check('password')
+    .exists()
+    .notEmpty(),
+  (req, res, next) => {
+    validateResult(req, res, next)
+  }
+]
+
+module.exports = { validateRegisterData, validateLoginData }
