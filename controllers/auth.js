@@ -51,7 +51,19 @@ const updateUserCtrl = async (req, res) => {
   try {
     userToEdit = req.userToEdit
     req = matchedData(req)
-    
+
+    if (req.email) {
+      const userExists = await userModel.findOne({ email: req.email })
+      if (userExists) {
+        handleErrorResponse(res, 'The email is already in use', 409)
+        return
+      }
+    }
+
+    if (req.password) {
+      req.password = await encrypt(req.password)
+    }
+
     const userUpdated = await userModel.findOneAndUpdate({ _id: userToEdit._id }, req, { new: true })
   
     res.send(userUpdated)
