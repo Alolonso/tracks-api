@@ -35,4 +35,29 @@ const validateLoginData = [
   }
 ]
 
-module.exports = { validateRegisterData, validateLoginData }
+const validateUpdateUserData = [
+  check('name')
+    .optional()
+    .notEmpty(),
+  check('age')
+    .optional()
+    .notEmpty()
+    .isInt({ min: 16 }),
+  check('email')
+    .optional()
+    .notEmpty()
+    .isEmail(),
+  check('password')
+    .optional()
+    .notEmpty()
+    .isLength({ min: 8, max:50 }),
+  (req, res, next) => {
+    validateResult(req, res, next)
+  }
+]
+
+module.exports = {
+  validateRegisterData,
+  validateLoginData,
+  validateUpdateUserData
+}

@@ -47,4 +47,18 @@ const loginCtrl = async (req, res) => {
   }
 }
 
-module.exports = { registerCtrl, loginCtrl }
+const updateUserCtrl = async (req, res) => {
+  try {
+    userToEdit = req.userToEdit
+    req = matchedData(req)
+    
+    const userUpdated = await userModel.findOneAndUpdate({ _id: userToEdit._id }, req, { new: true })
+  
+    res.send(userUpdated)
+  } catch (error) {
+    console.log(error)
+    handleErrorResponse(res)
+  }
+}
+
+module.exports = { registerCtrl, loginCtrl, updateUserCtrl }
