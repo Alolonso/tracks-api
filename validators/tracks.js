@@ -3,7 +3,7 @@ const validateResult = require('../utils/handleValidator')
 
 const validateTrackData = [
   check('title').exists().notEmpty(),
-  check('album').optional().notEmpty(),
+  check('album').optional(),
   check('artist').exists().notEmpty(),
   (req, res, next) => {
     validateResult(req, res, next)

@@ -6,6 +6,11 @@ const createTrackCtrl = async (req, res) => {
   try {
     const userAuth = req.userAuth
     req = matchedData(req)
+
+    if (req.album == '') {
+      req.album = null
+    }
+
     const data = await trackModel.create({...req, userId: userAuth._id})
     res.send(data)
   } catch (error) {
