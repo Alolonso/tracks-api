@@ -14,4 +14,22 @@ const createTrackCtrl = async (req, res) => {
   }
 }
 
-module.exports = { createTrackCtrl }
+const updateTrackCtrl = async (req, res) => {
+  try {
+    trackToEdit = req.trackToEdit
+    req = matchedData(req)
+  
+    if (req.album == '') {
+      req.album = null
+    }
+  
+    const trackUpdated = await trackModel.findOneAndUpdate({ _id: trackToEdit._id }, req, { new: true })
+  
+    res.send(trackUpdated)
+  } catch (error) {
+    console.log(error)
+    handleErrorResponse(res)
+  }
+}
+
+module.exports = { createTrackCtrl, updateTrackCtrl }

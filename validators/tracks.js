@@ -10,4 +10,13 @@ const validateTrackData = [
   }
 ]
 
-module.exports = { validateTrackData }
+const validateUpdateTrackData = [
+  check('title').optional().notEmpty(),
+  check('album').optional(),
+  check('artist').optional().notEmpty(),
+  (req, res, next) => {
+    validateResult(req, res, next)
+  }
+]
+
+module.exports = { validateTrackData, validateUpdateTrackData }
