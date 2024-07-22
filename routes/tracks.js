@@ -12,10 +12,12 @@ const {
 
 const {
   createTrackCtrl,
-  updateTrackCtrl
+  updateTrackCtrl,
+  deleteTrackCtrl
 } = require('../controllers/tracks')
 
 router.post('/', checkAuth, validateTrackData, createTrackCtrl)
 router.put('/:id', checkAuth, trackExist, checkTrackPermission, validateUpdateTrackData, updateTrackCtrl )
+router.delete('/:id', checkAuth, trackExist, checkTrackPermission, deleteTrackCtrl )
 
 module.exports = router

@@ -1,6 +1,10 @@
+const fs = require('fs')
 const { matchedData } = require('express-validator')
 const handleErrorResponse = require('../utils/handleError')
 const trackModel = require('../models/track')
+const storageModel = require('../models/storage')
+
+const MEDIA_PATH = `${__dirname}/../storage`
 
 const createTrackCtrl = async (req, res) => {
   try {
@@ -37,4 +41,25 @@ const updateTrackCtrl = async (req, res) => {
   }
 }
 
-module.exports = { createTrackCtrl, updateTrackCtrl }
+const deleteTrackCtrl = async (req, res) => {
+  try {
+    trackToEdit = req.trackToEdit
+    let fileDeleted = {}
+
+    if (trackToEdit.mediaId) {
+      const fileToDelete = await storageModel.findById(trackToEdit.mediaId)
+      const filePath = `${MEDIA_PATH}/${fileToDelete.filename}`
+      fs.unlinkSync(filePath)
+      fileDeleted = await storageModel.findByIdAndDelete(fileToDelete._id)
+    }
+
+    const trackDeleted = await trackModel.findByIdAndDelete(trackToEdit._id)
+
+    res.send({ trackDeleted, fileDeleted })
+  } catch (error) {
+    console.log(error)
+    handleErrorResponse(res)
+  }
+}
+
+module.exports = { createTrackCtrl, updateTrackCtrl, deleteTrackCtrl }
