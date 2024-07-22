@@ -46,4 +46,27 @@ const createFileCtrl = async (req, res) => {
   }
 }
 
-module.exports = { createFileCtrl }
+const deleteFileCtrl = async (req, res) => {
+  try {
+   const { trackToEdit } = req
+
+   if (!trackToEdit.mediaId) {
+     handleErrorResponse(res, `This track doesn't have an uploaded image`, 404)
+     return
+   }
+   
+   const newTrack = {...trackToEdit._doc, mediaId: null }
+
+   const file = await storageModel.findByIdAndDelete(trackToEdit.mediaId)
+   const filePath = `${MEDIA_PATH}/${file.filename}`
+   fs.unlinkSync(filePath)
+   const trackUpdated = await trackModel.findOneAndUpdate({ _id: trackToEdit._id }, newTrack, { new: true })
+
+   res.send(trackUpdated)
+  } catch (error) {
+    console.log(error)
+   handleErrorResponse(res)
+  }
+}
+
+module.exports = { createFileCtrl, deleteFileCtrl }

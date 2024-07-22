@@ -57,16 +57,16 @@ const trackExist = async (req, res, next) => {
 
 const trackFileExist = async (req, res, next) => {
   try {
-    const trackId = req.headers.trackid
+    const trackId = req.headers.trackid || req.params.id
     const isValid = mongoose.Types.ObjectId.isValid(trackId)
 
     if (!trackId) {
-      handleErrorResponse(res, `The trackId header is required`, 404)
+      handleErrorResponse(res, `The trackId is required`, 404)
       return
     }
 
     if (!isValid) {
-      handleErrorResponse(res, `Invalid trackId header`, 404)
+      handleErrorResponse(res, `Invalid trackId`, 404)
       return
     }
 
