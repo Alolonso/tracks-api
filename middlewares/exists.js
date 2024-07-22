@@ -55,4 +55,35 @@ const trackExist = async (req, res, next) => {
   }
 }
 
-module.exports = { userExist, trackExist }
+const trackFileExist = async (req, res, next) => {
+  try {
+    const trackId = req.headers.trackid
+    const isValid = mongoose.Types.ObjectId.isValid(trackId)
+
+    if (!trackId) {
+      handleErrorResponse(res, `The trackId header is required`, 404)
+      return
+    }
+
+    if (!isValid) {
+      handleErrorResponse(res, `Invalid trackId header`, 404)
+      return
+    }
+
+    const track = await trackModel.findById(trackId)
+
+    if (!track) {
+      handleErrorResponse(res, `The track doesn't exist`, 404)
+      return
+    }
+
+    req.trackToEdit = track
+
+    next()
+  } catch (error) {
+    console.log(error)
+    handleErrorResponse(res)
+  }
+}
+
+module.exports = { userExist, trackExist, trackFileExist }
