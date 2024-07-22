@@ -14,11 +14,13 @@ const {
 const {
   registerCtrl,
   loginCtrl,
-  updateUserCtrl
+  updateUserCtrl,
+  deleteUserCtrl
 } = require('../controllers/auth')
 
 router.post('/register', validateRegisterData, registerCtrl)
 router.post('/login', validateLoginData, loginCtrl)
 router.put('/:id', checkAuth, userExist, checkUserPermission, validateUpdateUserData, updateUserCtrl)
+router.delete('/:id', checkAuth, userExist, checkUserPermission, deleteUserCtrl )
 
 module.exports = router
