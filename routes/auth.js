@@ -12,12 +12,14 @@ const {
 } = require('../validators/auth')
 
 const {
+  getUserCtrl,
   registerCtrl,
   loginCtrl,
   updateUserCtrl,
   deleteUserCtrl
 } = require('../controllers/auth')
 
+router.get('/:id', userExist, getUserCtrl)
 router.post('/register', validateRegisterData, registerCtrl)
 router.post('/login', validateLoginData, loginCtrl)
 router.put('/:id', checkAuth, userExist, checkUserPermission, validateUpdateUserData, updateUserCtrl)

@@ -9,6 +9,18 @@ const { tokenSign } = require('../utils/handleToken')
 
 const MEDIA_PATH = `${__dirname}/../storage`
 
+const getUserCtrl = async (req, res) => {
+  try {
+    userToEdit = req.userToEdit
+    const { password, ...track } = userToEdit._doc
+
+    res.send(track)
+  } catch (error) {
+    console.log(error)
+    handleErrorResponse(res)
+  }
+}
+
 const registerCtrl = async (req, res) => {
   try {
     req = matchedData(req)
@@ -104,4 +116,4 @@ const deleteUserCtrl = async (req, res) => {
   }
 }
 
-module.exports = { registerCtrl, loginCtrl, updateUserCtrl, deleteUserCtrl }
+module.exports = { getUserCtrl, registerCtrl, loginCtrl, updateUserCtrl, deleteUserCtrl }
