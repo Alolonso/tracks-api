@@ -11,11 +11,13 @@ const {
 } = require('../validators/tracks')
 
 const {
+  getTracksCtrl,
   createTrackCtrl,
   updateTrackCtrl,
   deleteTrackCtrl
 } = require('../controllers/tracks')
 
+router.get('/', getTracksCtrl)
 router.post('/', checkAuth, validateTrackData, createTrackCtrl)
 router.put('/:id', checkAuth, trackExist, checkTrackPermission, validateUpdateTrackData, updateTrackCtrl )
 router.delete('/:id', checkAuth, trackExist, checkTrackPermission, deleteTrackCtrl )

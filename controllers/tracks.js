@@ -6,6 +6,19 @@ const storageModel = require('../models/storage')
 
 const MEDIA_PATH = `${__dirname}/../storage`
 
+const getTracksCtrl = async (req, res) => {
+  try {
+    const tracks = await trackModel.find()
+    .populate({ path: 'mediaId', select: 'url' })
+    .populate({ path: 'userId', select: 'name' })
+
+    res.send(tracks)
+  } catch (error) {
+    console.log(error)
+    handleErrorResponse(res)
+  }
+}
+
 const createTrackCtrl = async (req, res) => {
   try {
     const userAuth = req.userAuth
@@ -62,4 +75,4 @@ const deleteTrackCtrl = async (req, res) => {
   }
 }
 
-module.exports = { createTrackCtrl, updateTrackCtrl, deleteTrackCtrl }
+module.exports = { getTracksCtrl, createTrackCtrl, updateTrackCtrl, deleteTrackCtrl }
